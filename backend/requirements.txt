@@ -1,0 +1,10 @@
+flask==2.3.3
+pandas==2.2.3
+# Use SciPy wheel compatible with Python 3.12
+scipy==1.11.4
+# Slightly relax scikit-learn to latest 1.3.x
+scikit-learn==1.3.2
+matplotlib==3.8.1
+numpy==1.26.2
+flask-cors==4.0.0
+gunicorn==20.1.0
