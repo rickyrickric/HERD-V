@@ -18,7 +18,8 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        channel: 'stable'
+        # Pin a concrete SDK version to avoid channel resolution failures
+        flutter-version: '3.10.6'
         cache: true
 
     - name: Get dependencies
