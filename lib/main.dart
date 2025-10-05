@@ -117,7 +117,6 @@ class _HerdVAppState extends State<HerdVApp> {
     // don't await here; _loadTheme will call _loadCached indirectly
   }
 
-
   Future<void> _loadTheme() async {
     final sp = await SharedPreferences.getInstance();
     final v = sp.getBool('is_dark_mode') ?? false;
@@ -138,7 +137,10 @@ class _HerdVAppState extends State<HerdVApp> {
       scaffoldBackgroundColor: const Color(0xFFF6F8F3),
     );
     final darkTheme = ThemeData.dark().copyWith(
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2E7D32), brightness: Brightness.dark),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF2E7D32),
+        brightness: Brightness.dark,
+      ),
       scaffoldBackgroundColor: const Color(0xFF121212),
     );
     return MaterialApp(
@@ -182,7 +184,7 @@ class _HerdDashboardState extends State<HerdDashboard> {
     // also attempt to load bundled sample.csv asset and merge it if animals empty
     if (animals.isEmpty) {
       try {
-  final raw = await rootBundle.loadString('sample.csv');
+        final raw = await rootBundle.loadString('sample.csv');
         final rows = const CsvToListConverter(eol: '\n').convert(raw);
         if (rows.length > 1) {
           final headers = rows.first.map((h) => h.toString()).toList();
@@ -205,7 +207,6 @@ class _HerdDashboardState extends State<HerdDashboard> {
     }
   }
 
-
   Future<void> _cache() async {
     final sp = await SharedPreferences.getInstance();
     // encode on background isolate to avoid main-thread jank
@@ -223,7 +224,7 @@ class _HerdDashboardState extends State<HerdDashboard> {
         result.files.first.bytes ??
         await File(result.files.first.path!).readAsBytes();
     final csv = utf8.decode(bytes);
-  final rows = const CsvToListConverter(eol: '\n').convert(csv);
+    final rows = const CsvToListConverter(eol: '\n').convert(csv);
     if (rows.isEmpty) return;
     final headers = rows.first.map((e) => e.toString()).toList();
     final maps = <Map<String, dynamic>>[];
@@ -302,7 +303,9 @@ class _HerdDashboardState extends State<HerdDashboard> {
 
       // attach labels (lightweight)
       for (var i = 0; i < animals.length; i++) {
-        animals[i]['cluster'] = labels.isNotEmpty ? labels[i] + 1 : 1; // make clusters 1-based
+        animals[i]['cluster'] = labels.isNotEmpty
+            ? labels[i] + 1
+            : 1; // make clusters 1-based
       }
       await _cache();
 
@@ -317,7 +320,9 @@ class _HerdDashboardState extends State<HerdDashboard> {
               .map((m) => double.tryParse(m[key]?.toString() ?? '') ?? 0.0)
               .where((v) => v != 0.0)
               .toList();
-          final mean = vals.isEmpty ? 0.0 : vals.reduce((a, b) => a + b) / vals.length;
+          final mean = vals.isEmpty
+              ? 0.0
+              : vals.reduce((a, b) => a + b) / vals.length;
           means[key] = mean;
         }
         final summ = <String, dynamic>{
@@ -350,7 +355,9 @@ class _HerdDashboardState extends State<HerdDashboard> {
 
   // Build feature matrix for k-means (rows: animals, cols: features)
   List<List<double>> _buildFeatureMatrix(
-      List<Map<String, dynamic>> items, List<String> keys) {
+    List<Map<String, dynamic>> items,
+    List<String> keys,
+  ) {
     return items.map((a) {
       return keys.map((k) {
         return double.tryParse(a[k]?.toString() ?? '') ?? 0.0;
@@ -405,9 +412,13 @@ class _HerdDashboardState extends State<HerdDashboard> {
         if (members.isEmpty) continue;
         final avg = List<double>.filled(dim, 0.0);
         for (var m in members) {
-          for (var d = 0; d < dim; d++) { avg[d] += m[d]; }
+          for (var d = 0; d < dim; d++) {
+            avg[d] += m[d];
+          }
         }
-  for (var d = 0; d < dim; d++) { avg[d] /= members.length; }
+        for (var d = 0; d < dim; d++) {
+          avg[d] /= members.length;
+        }
         centroids[j] = avg;
       }
     }
@@ -430,11 +441,15 @@ class _HerdDashboardState extends State<HerdDashboard> {
     final movement = (summary['Movement_Score'] ?? 0).toDouble();
     final milk = (summary['Milk_Yield'] ?? 0).toDouble();
     final temp = (summary['Ear_Temperature_C'] ?? 0).toDouble();
-    if (parasite > 3.5 || fecal > 200) recs.add('Consider deworming and fecal testing');
-    if (movement < 4) recs.add('Increase pasture rotation and monitor mobility');
+    if (parasite > 3.5 || fecal > 200)
+      recs.add('Consider deworming and fecal testing');
+    if (movement < 4)
+      recs.add('Increase pasture rotation and monitor mobility');
     if (milk < 15) recs.add('Review nutrition and milking protocol');
-    if (temp > 39.0) recs.add('Inspect for fever/infection; check shelter and water');
-    if (recs.isEmpty) recs.add('Normal indicators — continue routine management');
+    if (temp > 39.0)
+      recs.add('Inspect for fever/infection; check shelter and water');
+    if (recs.isEmpty)
+      recs.add('Normal indicators — continue routine management');
     return recs.join('; ');
   }
 
@@ -464,7 +479,9 @@ class _HerdDashboardState extends State<HerdDashboard> {
         ),
         actions: [
           IconButton(
-            icon: Icon(widget.isDark == true ? Icons.dark_mode : Icons.light_mode),
+            icon: Icon(
+              widget.isDark == true ? Icons.dark_mode : Icons.light_mode,
+            ),
             tooltip: 'Toggle theme',
             onPressed: widget.onToggleTheme,
           ),
@@ -751,11 +768,13 @@ class _ClusterInsightsPageState extends State<ClusterInsightsPage> {
                   );
                   await tmpFile.writeAsString(csv);
                   // share - messenger was captured above before any awaits
-                    // For UI testing we simply save a temporary CSV and notify the user.
-                    if (!mounted) return;
-                    messenger.showSnackBar(
-                      SnackBar(content: Text('Saved recommendations to ${tmpFile.path}')),
-                    );
+                  // For UI testing we simply save a temporary CSV and notify the user.
+                  if (!mounted) return;
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text('Saved recommendations to ${tmpFile.path}'),
+                    ),
+                  );
                   return;
                 }
 
