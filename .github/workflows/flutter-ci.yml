@@ -18,8 +18,8 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        # Pin a concrete SDK version to avoid channel resolution failures
-        flutter-version: '3.10.6'
+        # Pin a concrete SDK version that provides Dart 3.9.2 (match local dev)
+        flutter-version: '3.35.4'
         cache: true
 
     - name: Get dependencies

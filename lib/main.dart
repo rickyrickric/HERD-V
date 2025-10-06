@@ -354,6 +354,7 @@ class _HerdDashboardState extends State<HerdDashboard> {
   }
 
   // Build feature matrix for k-means (rows: animals, cols: features)
+  // ignore: unused_element
   List<List<double>> _buildFeatureMatrix(
     List<Map<String, dynamic>> items,
     List<String> keys,
@@ -366,6 +367,7 @@ class _HerdDashboardState extends State<HerdDashboard> {
   }
 
   // Simple k-means implementation returning zero-based labels
+  // ignore: unused_element
   List<int> _kMeans(List<List<double>> X, int k, {int maxIter = 20}) {
     if (X.isEmpty) return [];
     final rnd = DateTime.now().millisecondsSinceEpoch;
@@ -441,15 +443,21 @@ class _HerdDashboardState extends State<HerdDashboard> {
     final movement = (summary['Movement_Score'] ?? 0).toDouble();
     final milk = (summary['Milk_Yield'] ?? 0).toDouble();
     final temp = (summary['Ear_Temperature_C'] ?? 0).toDouble();
-    if (parasite > 3.5 || fecal > 200)
+    if (parasite > 3.5 || fecal > 200) {
       recs.add('Consider deworming and fecal testing');
-    if (movement < 4)
+    }
+    if (movement < 4) {
       recs.add('Increase pasture rotation and monitor mobility');
-    if (milk < 15) recs.add('Review nutrition and milking protocol');
-    if (temp > 39.0)
+    }
+    if (milk < 15) {
+      recs.add('Review nutrition and milking protocol');
+    }
+    if (temp > 39.0) {
       recs.add('Inspect for fever/infection; check shelter and water');
-    if (recs.isEmpty)
+    }
+    if (recs.isEmpty) {
       recs.add('Normal indicators — continue routine management');
+    }
     return recs.join('; ');
   }
 
