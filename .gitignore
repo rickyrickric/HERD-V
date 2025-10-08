@@ -1,4 +1,10 @@
-# Miscellaneous
+# Added by upgrade process
+.idea/
+.vscode/
+/.dart_tool/
+/.pub-cache/
+build/
+/.packages# Miscellaneous
 *.class
 *.log
 *.pyc

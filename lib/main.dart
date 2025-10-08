@@ -145,6 +145,7 @@ class _HerdVAppState extends State<HerdVApp> {
     );
     return MaterialApp(
       title: 'HERD-V',
+      debugShowCheckedModeBanner: false,
       theme: theme,
       darkTheme: darkTheme,
       themeMode: _isDark ? ThemeMode.dark : ThemeMode.light,
@@ -682,21 +683,19 @@ class _ManualEntryPageState extends State<ManualEntryPage> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Weight_kg'),
                 keyboardType: TextInputType.number,
-                onSaved: (v) => data['Weight(kg)'] = double.tryParse(v ?? '0'),
+                onSaved: (v) => data['Weight_kg'] = double.tryParse(v ?? '0'),
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Milk_Yield'),
                 keyboardType: TextInputType.number,
-                onSaved: (v) =>
-                    data['Milk Yield(Liters)'] = double.tryParse(v ?? '0'),
+                onSaved: (v) => data['Milk_Yield'] = double.tryParse(v ?? '0'),
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Fertility_Score'),
                 keyboardType: TextInputType.number,
                 onSaved: (v) =>
-                    data['Fertility Score'] = double.tryParse(v ?? '0'),
+                    data['Fertility_Score'] = double.tryParse(v ?? '0'),
               ),
-
               SwitchListTile(
                 title: const Text('Vaccination Up To Date'),
                 value: data['Vaccination_Up_To_Date'] == true,
